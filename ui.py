@@ -1,12 +1,11 @@
 from typing import Tuple
 import customtkinter as ctk
 from PIL import Image
-
+from tkinter import filedialog
+from Songs import *
 import time
 
-
 ctk.set_appearance_mode("Dark")
-
 
 class App(ctk.CTk):
     def __init__(self, fg_color: str | Tuple[str, str] | None = None, **kwargs):
@@ -19,6 +18,8 @@ class App(ctk.CTk):
         self.columnconfigure(0,weight=1)
         self.columnconfigure(1,weight=1) 
         self.columnconfigure(2,weight=1) 
+        self.path_label=None
+
 
     def load_widgets(self):
 
@@ -38,6 +39,14 @@ class App(ctk.CTk):
         self.music_logo_label.grid(row=0,column=0,columnspan=3)
         #self.browse_song.grid(row=0,column=1)
         self.previuos_song_button.grid(row=1,column=0)
+
+    def browse_files(self):
+
+        file_path=filedialog.askopenfilename(title="Open your music File",filetypes=[("MP3 files","*.mp3"),("All files","*.*")])
+        self.path_label=file_path
+        song=Songs(file_path)
+
+        
 
 
 
