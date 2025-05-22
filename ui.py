@@ -2,10 +2,10 @@ from typing import Tuple
 import customtkinter as ctk
 from PIL import Image
 
+import time
+
 
 ctk.set_appearance_mode("Dark")
-
-
 
 
 class App(ctk.CTk):
@@ -38,6 +38,10 @@ class App(ctk.CTk):
         self.music_logo_label.grid(row=0,column=0,columnspan=3)
         #self.browse_song.grid(row=0,column=1)
         self.previuos_song_button.grid(row=1,column=0)
+
+
+
+
 app=App()
 app.mainloop()
 
