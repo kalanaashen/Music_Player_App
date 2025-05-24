@@ -73,8 +73,7 @@ class App(ctk.CTk):
         self.after(500,self.update_progress)
     
     def play_music_button(self):
-        
-        try:
+       #try:
             if not self.is_playing:
                 self.song.play_music()
                 self.play_logo_label.configure(image=self.pause_png)
@@ -83,15 +82,14 @@ class App(ctk.CTk):
                 self.is_paused = False
             elif self.is_playing and not self.is_paused:
                 self.song.pause_music()
-                self.play_logo_label.configure(image=self.play_png)
+                self.play_logo_label.configure(image=self.play_logo_png)
                 self.is_paused = True
             elif self.is_playing and self.is_paused:
                 self.song.resume_music()
                 self.play_logo_label.configure(image=self.pause_png)
                 self.is_paused = False
-        except:
-
-            cus=CustomMessageBox(self,"NOTICE","Please Select a Song!")
+        #except:
+            #cus=CustomMessageBox(self,"NOTICE","Please Select a Song!")
             
 
 app=App()

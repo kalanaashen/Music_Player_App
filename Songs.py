@@ -47,7 +47,7 @@ class Songs:
             print(f"PLay error  {e}")
 
     def get_position(self):
-        self.current_pos=pygame.mixer.get_pos()/1000
+        #self.current_pos=pygame.mixer.get_pos()/1000
         return pygame.mixer.music.get_pos()/1000
 
     def pause_music(self):
