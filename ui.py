@@ -4,6 +4,7 @@ from PIL import Image
 from tkinter import filedialog
 from Songs import *
 import time
+from custombox import CustomMessageBox
 
 ctk.set_appearance_mode("Dark")
 
@@ -19,34 +20,68 @@ class App(ctk.CTk):
         self.columnconfigure(1,weight=1) 
         self.columnconfigure(2,weight=1) 
         self.path_label=None
-
+        self.total=None
 
     def load_widgets(self):
 
         music_logo=Image.open("music.png")
+
         play_logo=Image.open('play.png')
+        self.progress_bar=ctk.CTkProgressBar(self,orientation="horizontal",width=200,height=10,progress_color="SpringGreen2")
+        self.progress_bar.set(0)
+        self.song_details=ctk.CTkLabel(self,text="")
+
+
+
         next_song=ctk.CTkImage(light_image=Image.open("next.png"),dark_image=Image.open("next.png"),size=(30,30))
         previuos_song=ctk.CTkImage(light_image=Image.open("back.png"),dark_image=Image.open("back.png"),size=(30,30))
         play_logo_png=ctk.CTkImage(light_image=play_logo,dark_image=play_logo,size=(50,50))
         music_logo_png=ctk.CTkImage(light_image=music_logo,dark_image=music_logo,size=(150,150))
-        self.play_logo_label=ctk.CTkButton(self,image=play_logo_png,text="",fg_color="SpringGreen2",command=None,hover_color="SpringGreen3",width=20)
+
+        self.play_logo_label=ctk.CTkButton(self,image=play_logo_png,text="",fg_color="SpringGreen2",hover_color="SpringGreen3",width=20,command=self.play_music_button)
         self.music_logo_label=ctk.CTkLabel(self,image=music_logo_png,text="",)
         self.previuos_song_button=ctk.CTkButton(self,image=previuos_song,text="",width=12,fg_color="SpringGreen2",command=None,hover_color="SpringGreen3")
         self.next_song_button=ctk.CTkButton(self,image=next_song,text="",width=12,fg_color="SpringGreen2",command=None,hover_color="SpringGreen3")
-        self.browse_song=ctk.CTkButton(self,text="Browse Files")
-        self.next_song_button.grid(row=1,column=2)
-        self.play_logo_label.grid(row=1,column=1)
-        self.music_logo_label.grid(row=0,column=0,columnspan=3)
-        #self.browse_song.grid(row=0,column=1)
-        self.previuos_song_button.grid(row=1,column=0)
+        self.browse_song=ctk.CTkButton(self,text="Browse Files",command=self.browse_files)
+        self.song_details.grid(row=0,column=1,sticky='nsew')
+        self.next_song_button.grid(row=3,column=2)
+        self.play_logo_label.grid(row=3,column=1)
+        self.music_logo_label.grid(row=1,column=0,columnspan=3)
+        self.browse_song.grid(row=1,column=2,sticky='e')
+        self.progress_bar.grid(row=2,column=0,columnspan=3,sticky="nsew")
+        self.previuos_song_button.grid(row=3,column=0)
 
     def browse_files(self):
 
         file_path=filedialog.askopenfilename(title="Open your music File",filetypes=[("MP3 files","*.mp3"),("All files","*.*")])
         self.path_label=file_path
-        song=Songs(file_path)
+        self.song=Songs(file_path)
+        song_name=self.song.name
+        song_artist=self.song.artist_name
+        self.duration=self.song.duration
+        self.song_details.configure(self,text=f"{song_name}\n {song_artist}",font=("Arial",16,"bold"))
 
+    def update_progress(self):
+
+        if self.path_label:
+            current=self.song.get_position()  
+            total=self.duration
+            progress = min(current / total, 1.0)
+            self.progress_bar.set(progress)
+        self.after(500,self.update_progress)
+
+    def play_music_button(self):
         
+        try:
+            self.song.play_music()
+            self.update_progress()
+
+
+        except:
+
+            cus=CustomMessageBox(self,"NOTICE","Please Select a Song!")
+            
+
 
 
 
@@ -66,4 +101,3 @@ app.mainloop()
 
 
 
-    
