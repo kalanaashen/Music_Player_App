@@ -8,6 +8,7 @@ class Songs:
         self.duration=None
         self.name=None
         self.artist_name=None
+        self.current_pos=None
         self.audio_path=audio_path
         self.find_name()
         self.find_length()
@@ -37,7 +38,7 @@ class Songs:
         except Exception as e:
             print("artist name error",e)
 
-            
+
     def play_music(self):
         try:
             pygame.mixer.music.load(self.audio_path)
@@ -46,10 +47,14 @@ class Songs:
             print(f"PLay error  {e}")
 
     def get_position(self):
-
+        self.current_pos=pygame.mixer.get_pos()/1000
         return pygame.mixer.music.get_pos()/1000
 
+    def pause_music(self):
+        pygame.mixer.music.pause()
 
+    def resume_music(self):
+        pygame.mixer.music.unpause()
 
 
 
