@@ -58,6 +58,8 @@ class App(ctk.CTk):
         self.progress_bar.grid(row=2,column=1,columnspan=3,sticky="nsew")
         self.previuos_song_button.grid(row=3,column=1)
         self.volume_bar.grid(row=0,column=0,padx=20,rowspan=2)
+
+        
     def browse_files(self):
 
         file_path=filedialog.askopenfilename(title="Open your music File",filetypes=[("MP3 files","*.mp3"),("All files","*.*")])
