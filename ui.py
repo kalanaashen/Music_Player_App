@@ -12,12 +12,16 @@ class App(ctk.CTk):
         super().__init__(fg_color, **kwargs)
 
         self.title("Music Player")
-        self.geometry("500x750")
+        self.geometry("600x300")
         self.load_widgets()
         self.rowconfigure(0,weight=1)
         self.columnconfigure(0,weight=1)
         self.columnconfigure(1,weight=1) 
-        self.columnconfigure(2,weight=1) 
+        self.columnconfigure(2,weight=1)
+        self.columnconfigure(3,weight=1)
+        self.rowconfigure(1,weight=1)  
+        self.rowconfigure(2,weight=0)
+        self.rowconfigure(3,weight=1)  
         self.path_label=None
         self.total=None
         self.is_playing=False
@@ -31,7 +35,9 @@ class App(ctk.CTk):
         self.progress_bar=ctk.CTkProgressBar(self,orientation="horizontal",width=200,height=10,progress_color="SpringGreen2")
         self.progress_bar.set(0)
         self.song_details=ctk.CTkLabel(self,text="")
+        self.volume_bar=ctk.CTkSlider(self,from_=0,to=1,number_of_steps=100,command=self.volume,orientation='vertical',width=10,height=200,progress_color="SpringGreen2",button_color="SpringGreen3")
 
+        self.volume_bar.set(0.5)
 
         self.pause_png=ctk.CTkImage(light_image=pause_logo,dark_image=pause_logo,size=(30,30))
         next_song=ctk.CTkImage(light_image=Image.open("next.png"),dark_image=Image.open("next.png"),size=(30,30))
@@ -44,14 +50,14 @@ class App(ctk.CTk):
         self.previuos_song_button=ctk.CTkButton(self,image=previuos_song,text="",width=12,fg_color="SpringGreen2",command=None,hover_color="SpringGreen3")
         self.next_song_button=ctk.CTkButton(self,image=next_song,text="",width=12,fg_color="SpringGreen2",command=None,hover_color="SpringGreen3")
         self.browse_song=ctk.CTkButton(self,text="Browse Files",command=self.browse_files)
-        self.song_details.grid(row=0,column=1,sticky='nsew')
-        self.next_song_button.grid(row=3,column=2)
-        self.play_logo_label.grid(row=3,column=1)
-        self.music_logo_label.grid(row=1,column=0,columnspan=3)
-        self.browse_song.grid(row=1,column=2,sticky='e')
-        self.progress_bar.grid(row=2,column=0,columnspan=3,sticky="nsew")
-        self.previuos_song_button.grid(row=3,column=0)
-
+        self.song_details.grid(row=0,column=2,sticky='nsew')
+        self.next_song_button.grid(row=3,column=3)
+        self.play_logo_label.grid(row=3,column=2)
+        self.music_logo_label.grid(row=1,column=1,columnspan=4,sticky="n")
+        self.browse_song.grid(row=1,column=3,sticky='e')
+        self.progress_bar.grid(row=2,column=1,columnspan=3,sticky="nsew")
+        self.previuos_song_button.grid(row=3,column=1)
+        self.volume_bar.grid(row=0,column=0,padx=20,rowspan=2)
     def browse_files(self):
 
         file_path=filedialog.askopenfilename(title="Open your music File",filetypes=[("MP3 files","*.mp3"),("All files","*.*")])
@@ -73,7 +79,7 @@ class App(ctk.CTk):
         self.after(500,self.update_progress)
     
     def play_music_button(self):
-       #try:
+        try:
             if not self.is_playing:
                 self.song.play_music()
                 self.play_logo_label.configure(image=self.pause_png)
@@ -88,9 +94,14 @@ class App(ctk.CTk):
                 self.song.resume_music()
                 self.play_logo_label.configure(image=self.pause_png)
                 self.is_paused = False
-        #except:
-            #cus=CustomMessageBox(self,"NOTICE","Please Select a Song!")
-            
+        except:
+            cus=CustomMessageBox(self,"NOTICE","Please Select a Song!")
+    def volume(self,value):
+        try:
+            self.song.volume_mixer(value)
+        except:
+            cus=CustomMessageBox(self,"NOTICE","Please Select a Song First!")
+
 
 app=App()
 app.mainloop()

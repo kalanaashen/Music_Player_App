@@ -47,7 +47,7 @@ class Songs:
             print(f"PLay error  {e}")
 
     def get_position(self):
-        #self.current_pos=pygame.mixer.get_pos()/1000
+        
         return pygame.mixer.music.get_pos()/1000
 
     def pause_music(self):
@@ -55,7 +55,9 @@ class Songs:
 
     def resume_music(self):
         pygame.mixer.music.unpause()
-
+        
+    def volume_mixer(self,value):
+        pygame.mixer.music.set_volume(float(value))
 
 
 
